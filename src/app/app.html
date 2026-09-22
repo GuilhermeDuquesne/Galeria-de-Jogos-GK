@@ -1,0 +1,64 @@
+<div class="container">
+
+  <h1 class="tituloPrincipal">{{ titulo }}</h1>
+  <p class="totalJogos">Total de jogos Jogados: {{ jogos.length }}</p>
+
+  <div class="formulario card">
+    <h2>Adicione um novo jogo!</h2>
+
+
+    <input type="text" [(ngModel)]="novoTitulo" placeholder="Nome do jogo">
+
+    <input type="text" [(ngModel)]="novoGenero" placeholder="Genero do jogo">
+
+    <input type="number" [(ngModel)]="novaNota" min="0" max="10" placeholder="Nota (0 a 10)">
+
+    <button
+    [disabled]="(!this.novoTitulo.trim()
+              || !this.novoGenero.trim()
+              || (this.novaNota === null
+               || (this.novaNota !== null
+               &&  this.novaNota < 0
+                || this.novaNota > 10)))"
+    (click)="adicionarJogo()">
+    Adicionar Jogo
+    </button>
+  </div>
+
+  <!---- Campo de Busca -->
+  <div class="busca card">
+    <input type="text" [(ngModel)]="textoBusca" placeholder="Buscar jogo pelo nome">
+  </div>
+
+  <!-- Lista de jogos -->
+  <div class="lista-jogos">
+    @for (jogo of jogosFiltrados(); track $index) {
+      <div class="card-jogo card" [class.platinado]="jogo.platinado">
+
+        <h3>{{ jogo.titulo }}</h3>
+        <div class="info">
+          <p><strong>Gênero: </strong> {{ jogo.genero }}</p>
+          <p><strong>Nota: </strong> {{ jogo.nota }}</p>
+
+
+          @if (jogo.platinado) {
+            <p>Já platinei!</p>
+          } @else {
+            <p>Já joguei!</p>
+          }
+        </div>
+
+        <div class="acoes">
+          <button (click) ="alternarJogado(jogo)">
+            Marcar como {{ jogo.platinado ? 'não platinado' : 'platinado'}}
+          </button>
+          <button class="remover" (click)="removerJogo(jogo)">Remover</button>
+        </div>
+
+      </div><!-- card-->
+    } @empty {
+      <p class="vazio   card">Nenhum jogo encontrado</p>
+    }
+  </div><!--Lista de jogos-->
+</div><!--- container-->
+
